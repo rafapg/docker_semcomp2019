@@ -28,19 +28,32 @@ docker container inspect c_mongo -f "{{".NetworkSettings.Networks.bridge.IPAddre
 
 
 # Insere um minicurso pela API Rest usando um POST via cURL
-curl -X POST -d '{"name":"docker-worshop" , "description":"the best WS public of all opensanca events"}' http://localhost:8080/minicursos
+curl -X POST \
+  http://localhost:8080/minicursos \
+  -H 'Content-Type: application/json' \
+  -H 'cache-control: no-cache' \
+  -d '{
+    "name": "DockerSemcomp",
+    "description": "Subindo uma API Rest com Docker"
+}'
 
 # Lista todos os minicursos
-curl -X GET http://localhost:8080/minicursos
+curl -X \
+  GET http://localhost:8080/minicursos \
+  -H 'cache-control: no-cache'
 
 # Lista minicurso com ID_MINICURSO
-ID_MINICURSO="5cca1daed766790010b11f8a"
-curl -X GET http://localhost:8080/minicursos/$ID_MINICURSO
+ID_MINICURSO="5d914c44579fb800113e1a5a"
+curl -X GET \
+  http://localhost:8080/minicursos/$ID_MINICURSO \
+  -H 'cache-control: no-cache'
 
 
 # Remove minicurso com ID_MINICURSO
-ID_MINICURSO="5cca1daed766790010b11f8a"
-curl -X DELETE http://localhost:8080/minicursos/$ID_MINICURSO
+ID_MINICURSO="5d914c44579fb800113e1a5a"
+curl -X DELETE \
+  http://localhost:8080/minicursos/$ID_MINICURSO \
+  -H 'cache-control: no-cache'
 
 
 # Para o container antigo do Server Node (e apaga por causa da flag --rm)
@@ -61,7 +74,6 @@ docker container run --rm --name node_server --link c_mongo -v $PWD/node-rest-ex
 
 
 docker build -t opensanca/minicurso-server:devconf19 node-rest-example/.
-
 
 # Subir o servidor Node.js
 # Nome do container node_server (--name)
